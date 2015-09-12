@@ -6,6 +6,7 @@ all:
 
 knit:
 	echo "library(knitr); knit2html(\"$(FILE).Rmd\")" | R --save -q
+	cp course.html index.html
 
 view:
 	google-chrome $(FILE).html

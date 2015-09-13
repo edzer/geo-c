@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-<title>Geostatistics</title>
+<title>Science</title>
 
 <script type="text/javascript">
 window.onload = function() {
@@ -57,6 +57,9 @@ var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/<
 hljs.initHighlightingOnLoad();
 </script>
 
+<!-- MathJax scripts -->
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
 
 
 <style type="text/css">
@@ -201,16 +204,379 @@ hr {
 </head>
 
 <body>
+<div id="toc">
+<div id="toc_header">Table of Contents</div>
+<ul>
+<li>
+<a href="#toc_0">Science</a>
+<ul>
+<li>
+<a href="#toc_1">How does science work?</a>
+</li>
+<li>
+<a href="#toc_2">Deduction</a>
+</li>
+<li>
+<a href="#toc_3">Induction</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_4">Data analysis</a>
+</li>
+<li>
+<a href="#toc_5">Reference systems</a>
+</li>
+<li>
+<a href="#toc_6">Spatial data, spatio-temporal data</a>
+<ul>
+<li>
+<a href="#toc_7">Limitation of relational databases</a>
+</li>
+<li>
+<a href="#toc_8">Phenomena types</a>
+<ul>
+<li>
+<a href="#toc_9">Continuously varying types</a>
+</li>
+<li>
+<a href="#toc_10">Discrete objects or events</a>
+</li>
+<li>
+<a href="#toc_11">Moving object trajectories</a>
+</li>
+<li>
+<a href="#toc_12">Aggregations</a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_13">Statistics</a>
+<ul>
+<li>
+<a href="#toc_14">Descriptive statistics</a>
+</li>
+<li>
+<a href="#toc_15">Statistical inference</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_16">Spatial statistics, geostatistics</a>
+</li>
+<li>
+<a href="#toc_17">R</a>
+<ul>
+<li>
+<a href="#toc_18">R packages</a>
+</li>
+<li>
+<a href="#toc_19">CRAN</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_20">Open source software</a>
+<ul>
+<li>
+<a href="#toc_21">Collaborative development: git, GitHub</a>
+</li>
+<li>
+<a href="#toc_22">Inviting third parties to collaborate</a>
+</li>
+<li>
+<a href="#toc_23">Licenses</a>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+
+
 <p><a href="http://creativecommons.org/licenses/by-sa/4.0/">CC-BY-SA</a>, Edzer Pebesma 2015.</p>
 
-<h1>Geostatistics</h1>
+<h1 id="toc_0">Science</h1>
 
-<pre><code class="r">a &lt;- 1:3
-a
+<p>Science is about gathering and communicating facts about the world, or theories and abstractions of it. Scientists do this by using methods that are accepted by, or acceptable to, other scientists.</p>
+
+<h2 id="toc_1">How does science work?</h2>
+
+<p>You can make discoveries on your own, but they only become part of science after you successfully communicate them. Acceptance comes after peer review, the process where (anonymous) experts evaluate your (written) work, and accept it (not necessarily as <em>truth</em>, but as proper scientific work).</p>
+
+<p>Generally, there are two pathways for gathering knowledge deduction and induction.</p>
+
+<h2 id="toc_2">Deduction</h2>
+
+<p>Deduction start from first principles (axioms) and derives consequences, within the framework of these axioms. Example are found e.g. in Euclidean geometry. In this framework, one can proof things: if the axioms are true, then some facts deriviing from it must also be true. Logic, mathematics.</p>
+
+<h2 id="toc_3">Induction</h2>
+
+<p>Induction works the other way around: we confront ideas (hypotheses, <em>possible truths</em>) with observations on the real world, and try to choose the best. Along this path, one cannot find absolute truth, but only gain evidence for one hypothesis over the other. The principle is that of <em>falsification</em> (due to Popper): using observation, we try to falsify hypothesis A in favour of hypothesis B. That doesn&#39;t make B true, but the best hypothesis around, until hypothesis C defies B. Natural sciences, social sciences. The science area that is concerned with probabilistic statements about hypothesis is statistics. The science area that predicts the frequencies of outcomes of observation, given knowlegde of the truth, is probability.</p>
+
+<h1 id="toc_4">Data analysis</h1>
+
+<p>Data is a collection of numbers (or symbols) with meaning. In other words: &ldquo;10, 8, 5.5&rdquo;&ldquo; are numbers, but no data. &quot;The city of Muenster, Germany had 282,210 registered inhabitants on Jan 1st, 2014&rdquo;&ldquo; is a statement containing data. You could argue that the &quot;282,210&rdquo;&ldquo; is the data, the rest of the sentence giving the meaning, or that &quot;city of Muenster, Germany&rdquo;, &ldquo;282,210&rdquo;, &ldquo;registered inhabitants&rdquo;, and &ldquo;Jan 1, 2014&rdquo; are all data elements of a single observation. One could go on and explain what exactly the city of Muenster, Germany is, what registration means, and how we should understand the phrase &ldquo;Jan 1, 2014&rdquo;.</p>
+
+<p>In practice, we can be pretty sloppy: </p>
+
+<pre><code class="r">library(foreign)
+d = read.dbf(system.file(&quot;shapes/sids.dbf&quot;, package=&quot;maptools&quot;)[1])
+head(d)
 </code></pre>
 
-<pre><code>## [1] 1 2 3
+<pre><code>##    AREA PERIMETER CNTY_ CNTY_ID        NAME  FIPS FIPSNO CRESS_ID BIR74
+## 1 0.114     1.442  1825    1825        Ashe 37009  37009        5  1091
+## 2 0.061     1.231  1827    1827   Alleghany 37005  37005        3   487
+## 3 0.143     1.630  1828    1828       Surry 37171  37171       86  3188
+## 4 0.070     2.968  1831    1831   Currituck 37053  37053       27   508
+## 5 0.153     2.206  1832    1832 Northampton 37131  37131       66  1421
+## 6 0.097     1.670  1833    1833    Hertford 37091  37091       46  1452
+##   SID74 NWBIR74 BIR79 SID79 NWBIR79
+## 1     1      10  1364     0      19
+## 2     0      10   542     3      12
+## 3     5     208  3616     6     260
+## 4     1     123   830     2     145
+## 5     9    1066  1606     3    1197
+## 6     7     954  1838     5    1237
 </code></pre>
+
+<h1 id="toc_5">Reference systems</h1>
+
+<p>In order to bind meaning to numbers of symbols (and make values valuable), we need <em>reference systems</em>. Reference systems define the context of values, and make them unambiguously interpretable, and by that <em>meaningful</em>. In <a href="http://www.sciencedirect.com/science/article/pii/S1364815213001977">Stasch et al., 2014</a> we argue that for spatio-temporal information, we need at least four reference system basic types: space, time, qualities, and objects.</p>
+
+<table><thead>
+<tr>
+<th align="left">symbol</th>
+<th align="left">type</th>
+<th align="left">meaning</th>
+<th align="left">example</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">S</td>
+<td align="left">space</td>
+<td align="left">\(\RR^2\)</td>
+<td align="left">$7<sup>o$E,</sup> $52.2<sup>o$N;</sup> WGS84</td>
+</tr>
+<tr>
+<td align="left">T</td>
+<td align="left">time</td>
+<td align="left">\(\RR\)</td>
+<td align="left">Jan 1, 2014, 12:00 UTC; ISO 8601; POSIX time</td>
+</tr>
+<tr>
+<td align="left">Q</td>
+<td align="left">quality</td>
+<td align="left">\(\RR\)</td>
+<td align="left">$25.3<sup>o$C</sup> ; UCUM; <a href="http://www.bipm.org/en/measurement-units">SI</a></td>
+</tr>
+<tr>
+<td align="left">D</td>
+<td align="left">object</td>
+<td align="left">\(\NN\)</td>
+<td align="left">Edzer Pebesma, Passport NN3JR69F</td>
+</tr>
+</tbody></table>
+
+<p>From the basic types, we use functions to create representations
+of phenomena; these phenomena can be evaluated to generate data.</p>
+
+<p>Functions are useful because</p>
+
+<ul>
+<li>they map from domain into range, and give one and only one range value for each domain value</li>
+<li>unlike data which is always discrete, function can represent <em>continuous phenomena</em></li>
+<li>in much of the world around us, variation appears to be <em>continuously changing</em> (over space, in time)</li>
+</ul>
+
+<h1 id="toc_6">Spatial data, spatio-temporal data</h1>
+
+<p>As mentioned above, data are always discrete. The reason for this is
+that continuous variation in the real world is usually not understood
+for 100%, and so cannot be captured fully by parametric, continuous
+functions. Hence, we would need an infinite amount of observations
+for any limited time frame or spatial extent to reprensent it.</p>
+
+<h2 id="toc_7">Limitation of relational databases</h2>
+
+<p>There is a tendency to store all data in (relational) databases. This is a good idea when the records refer to objects (such as persons), but is not always a good idea when the data refer to continuosly varying phenomena.  For instance, for images the elementary (discrete) observation is an image pixel. Yet, storing a pixel value in each record of a data base is not considered a good idea, because</p>
+
+<ul>
+<li>it takes much more space, and requires explicit storing of which pixel belongs to which image, and to which location (row/column)</li>
+<li>the natural ordering of pixels in a 2-D array gets lost</li>
+<li>the data base would need to take care of the fact that every pixel has one and only one value</li>
+</ul>
+
+<h2 id="toc_8">Phenomena types</h2>
+
+<h3 id="toc_9">Continuously varying types</h3>
+
+<p>Fields: \(S \times T \Rightarrow Q\); special cases: time series \(T \Rightarrow Q\), e.g. for a particular sensor location; spatial fields \(S \Rightarrow Q\), e.g. for a particular moment in time;</p>
+
+<p>Examples: air temperature, CO2 content of the air, O2 pressure in the water</p>
+
+<h3 id="toc_10">Discrete objects or events</h3>
+
+<p>Point patterns: \(D \Rightarrow S \times T\); special cases spatial (\(D \Rightarrow S\)) and temporal (\(D \Rightarrow T\)) point patterns.</p>
+
+<p>Examples: epicenters of earth quakes; disease cases; land mines; sightings of a particular bird species.</p>
+
+<p>Since both objects and events typically have a duration (or lifetime), their distinction is sometimes a matter of perspective. When considering a person as an object from the &ldquo;now&rdquo; perspective, on a geologic time scale its life is a short-duration event.</p>
+
+<h3 id="toc_11">Moving object trajectories</h3>
+
+<p>Objects that move their position (or extent) over time create trajectories \(T \Rightarrow S\).</p>
+
+<h3 id="toc_12">Aggregations</h3>
+
+<h1 id="toc_13">Statistics</h1>
+
+<h2 id="toc_14">Descriptive statistics</h2>
+
+<ul>
+<li>Stevens&#39;s measurement scales</li>
+<li>Measures of central tendency</li>
+<li>Measures of variation</li>
+<li>Describing a distribution</li>
+</ul>
+
+<h2 id="toc_15">Statistical inference</h2>
+
+<p>Name the appropriate technique to compare</p>
+
+<ul>
+<li>a sample with a fixed value</li>
+<li>two random samples wrt their mean value</li>
+<li>two random samples wrt their variance</li>
+<li>\(k\) random samples wrt their mean value</li>
+<li>the variation of two continuous variable</li>
+<li>how one continuous variable depends on more than one (continuous, or nominal) variables</li>
+</ul>
+
+<h1 id="toc_16">Spatial statistics, geostatistics</h1>
+
+<p>Spatial statistics concerns the analysis (description, modelling,
+prediction, simulation) of spatial phenomena, where the spatial
+locations play an explicit role. Spatial statistical techniques
+usually focus on one of</p>
+
+<ul>
+<li>continuous phenomena (fields): geostatistics</li>
+<li>discrete objects (point patterns): point pattern analysis</li>
+<li>aggregations (areal data): areal data analysis</li>
+</ul>
+
+<p>although sometimes several data types need to be integrated.</p>
+
+<h1 id="toc_17">R</h1>
+
+<p><a href="http://www.r-project.org/">R</a> is an open source environment for statistical computing and graphics that runs on windows, Mac, and unix (linux) computers. It is probably the most used software for data analysis in research, teaching, and industry. R is known for its massive amount of user-contributed extension packages which offer functionality in all kind of data analysis domains (spatial, finance, bioinformatics, HPC, graphical, web services, etc).</p>
+
+<p>In essence, R implements a programming language that lets you execute (evaluate) expressions like</p>
+
+<pre><code class="r">a &lt;- 1:4 # assign the numbers 1 through 4 to a; asignment doesn&#39;t print anything
+a # simply print/echo
+</code></pre>
+
+<pre><code>## [1] 1 2 3 4
+</code></pre>
+
+<pre><code class="r">a + 1 # add one, print
+</code></pre>
+
+<pre><code>## [1] 2 3 4 5
+</code></pre>
+
+<pre><code class="r">a ^ 2 # square, print
+</code></pre>
+
+<pre><code>## [1]  1  4  9 16
+</code></pre>
+
+<h2 id="toc_18">R packages</h2>
+
+<h2 id="toc_19">CRAN</h2>
+
+<p>The comprehensive R archive network (<a href="https://cran.r-project.org/">CRAN</a>) is large a network of mirrors that serves besides the R software a set of (currently over 7000) quality controlled R extension packages. Having packages on CRAN makes it easy for R users:</p>
+
+<ul>
+<li>to install, and update extension packages, along with the packages on which they depend</li>
+</ul>
+
+<p>and for R package developers to</p>
+
+<ul>
+<li>develop packages that depend on other quality-controlled (CRAN) packages</li>
+<li>distribute their extension package to the widest range of users</li>
+<li>distribute source code, and not have to worry about cross compilation on Windows or MacOS computers</li>
+<li>get informed about software issues due to changes in R, or in other packages</li>
+</ul>
+
+<p>CRAN task views (reached from a CRAN mirror) give human-readable overviews of available CRAN packages, ordered by topic.</p>
+
+<p>CRAN quality control includes</p>
+
+<ul>
+<li>checking against R development versions</li>
+<li>checking completeness of documentation</li>
+<li>running examples and (regression) tests</li>
+<li>checking packages dependencies</li>
+</ul>
+
+<h1 id="toc_20">Open source software</h1>
+
+<p>Open source software is software that you not only can use, but from which you can also read the source code. Open source software is not always for free: you can buy Ubuntu or Redhat linux distributions. The benefit of doing so lies often in service contracts. Data centers and cloud providers often offer paid services, but are built on open source software.</p>
+
+<p>For scientific computing, using open source software is the only way to guarantee maximal transparency; along with open access to publications and data, it is one of the pilars of <em>open science</em>. </p>
+
+<p>Open source software is sometimes said to be better software, because many eyes make bugs shallow. A number of serious security flaws in abundant open source components (Heartbleed: ssh, Shellshock: bash) have stressed once more that for many eyes to look at (open sourc) software, effort (i.e.: money) is needed.</p>
+
+<h2 id="toc_21">Collaborative development: git, GitHub</h2>
+
+<p>Today it is extremely easy to publish open source software on the internet, and to contribute to, or collaborate with other developers in an open way. Currently the dominant platform for doing this is github. Other platforms have been popular in the past (sourceforge, google code), and there is no guarantee that github will remain popular, available, or even free.</p>
+
+<p>Exercise: create a github account and create an open source project on it.</p>
+
+<h2 id="toc_22">Inviting third parties to collaborate</h2>
+
+<p>Having a project on github (or any other collaborative software development platform) is all but a guarantee that someone will discover your software, use it, and contribute. For this to happen, you need to actively communicate your work, draw attention to it, and advertise. Connecting the project to existing, similar projects may help (think of the case of R packages). </p>
+
+<h2 id="toc_23">Licenses</h2>
+
+<p>When you create something and distribute it, there are automatic copyrights. Depending on whether you did this in an employment contract (and depending on the details of the contract) copyright might be with the author, or with the employer.</p>
+
+<p>Licenses communicate under which conditions third parties are allowed to use your work, e.g. whether they are allowed </p>
+
+<ul>
+<li>to modify it</li>
+<li>to redistribute modified copies, or</li>
+<li>to include it in commercial products</li>
+</ul>
+
+<p>or whether they are obliged to </p>
+
+<ul>
+<li>give you credit when they do</li>
+</ul>
+
+<p>Software licences are somewhat more complex than general licenses of creative work (such as creative commons), because you can do more complex things with software than e.g. with plain texts or photos, such as compiling and linking.</p>
+
+<p>Exercise: read the text of the following licenses:</p>
+
+<ul>
+<li>GPL 3</li>
+<li>LGPL</li>
+<li>Affero-GPL</li>
+<li>Apache 2.0</li>
+<li>WTFL</li>
+<li>CC-BY</li>
+<li>CC-BY-SA</li>
+<li>CC-BY-NC-ND</li>
+</ul>
+
+<p>and discuss which one(s) are open (look also for definitions of open), which ones are copyleft, and which one you would be comfortable working with.</p>
 
 </body>
 

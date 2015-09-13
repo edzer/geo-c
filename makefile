@@ -5,7 +5,7 @@ all:
 	make knit
 
 knit:
-	echo "library(knitr); knit2html(\"$(FILE).Rmd\")" | R --save -q
+	echo "library(knitr); knit2html(\"$(FILE).Rmd\", options = c(getOption(\"markdown.HTML.options\"), \"toc\"))" | R --save -q
 	cp course.html index.html
 
 view:

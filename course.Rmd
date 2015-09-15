@@ -1,9 +1,11 @@
 ---
-title: "GEO-C Kick-Off course, Castellon, Sept 15, 2015: Geostatistics" 
+title: 'GEO-C Kick-Off course, Castellon, Sept 15, 2015: Geostatistics'
 output:
+  pdf_document:
+    toc: yes
   html_document:
-    toc: true
     theme: united
+    toc: yes
 ---
 
 [CC-BY-SA](http://creativecommons.org/licenses/by-sa/4.0/), Edzer Pebesma 2015.
@@ -150,7 +152,7 @@ with
 * $g()$ the link function, describing how the observations relate to the linear model (examples: log, logistic)
 
 ## Geostatistics
-Geostatistics studies field variables, whose variation over space (and/or time) is continuous. Suppose we have sample data, e.g. from the \code{meuse} data set:
+Geostatistics studies field variables, whose variation over space (and/or time) is continuous. Suppose we have sample data, e.g. from the `meuse` data set:
 ```{r,fig=TRUE}
 library(sp)
 demo(meuse,ask=FALSE,echo=FALSE)

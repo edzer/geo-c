@@ -1,10 +1,10 @@
 ---
 title: 'GEO-C Kick-Off course, Castellon, Sept 15, 2015: Geostatistics'
 output:
-  pdf_document:
-    toc: yes
   html_document:
     theme: united
+    toc: yes
+  pdf_document:
     toc: yes
 ---
 
@@ -158,6 +158,7 @@ library(sp)
 demo(meuse,ask=FALSE,echo=FALSE)
 spplot(meuse["zinc"], colorkey = TRUE, sp.layout = meuse.area)
 ```
+
 Looking at the distribution of the `zinc` variable, it may be a good idea to work with log-transforms:
 ```{r,fig=TRUE}
 par(mfrow = c(1,2))
@@ -165,6 +166,7 @@ hist(meuse$zinc)
 hist(log(meuse$zinc))
 par(mfrow = c(1,1))
 ```
+
 For interpolation, we first try to compute the sample variogram, and fit a valid model to it:
 ```{r, fig=TRUE}
 library(gstat)
@@ -172,6 +174,7 @@ v = variogram(log(zinc)~1, meuse)
 v.fit = fit.variogram(v, vgm(1, "Sph", 900, 1))
 plot(v, v.fit)
 ```
+
 before we interpolate the values by kriging:
 ```{r, fig=TRUE}
 k = krige(log(zinc)~1, meuse, meuse.grid, v.fit)
@@ -189,21 +192,25 @@ library(maptools) # as(.,"owin")
 pp = ppp(cc[,1], cc[,2], window = as(meuse.area, "owin"))
 plot(pp)
 ```
+
 This plot is the data we look at: distribution of points (sample locations) in the observation window. We can estimate the G-function, which computers the nearest neighbour distribution and compares this to a CSR (completely spatial
 random) function.
 ```{r,fig=TRUE}
 plot(Gest(pp))
 ```
+
 If we simulate 99 realisations of a CSR process, and give the envelope of the G-function for this set, we can compare our sample with the CSR process,
 ```{r,fig=TRUE}
 plot(envelope(pp, fun = Gest, nsim = 99))
 ```
+
 and see that compared to CSR, in our sample small distances are under-represented.
 
 A density of the point patterns is obtained by:
 ```{r,fig=TRUE}
 plot(density(pp))
 ```
+
 note that this function chooses several variables automatically, including the bandwith (smoothing factor) of the density; less or more smoothed densities are obtained by specifying `sigma`, the kernel width:
 ```{r,fig=TRUE}
 par(mfrow=c(1,2))

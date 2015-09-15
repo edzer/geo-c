@@ -137,23 +137,87 @@ $$y = X \beta + e$$
 with IID e, i.e. $\mbox{Cov}(e)=\sigma^2 I$ in two  ways:
 
 * the generalized linear model (GLM) allows errors, under the LM Gaussian, to be from one of the exponential distributions, and introduces a link function $g()$:
-$$\mbox{E}(y) = \mu \ \ g(\mu) = X \beta + e$$
+$$\mbox{E}(y) = \mu \ \ g(\mu) = X \beta$$
 * the random effect contains a spatially, temporally or spatio-temporally correlated effect, and is split in $Z\gamma + e$, where $e$ is still IID and $Z \gamma$ represents random effects.
 
 This means we end up with the generalized linear mixed model
-$$g(y) = X \beta + Z \gamma + e$$
+$$y = g^{-1}(X \beta + Z \gamma) + e$$
 with 
 
 * $X \beta$ the fixed effects
 * $Z \gamma$ the random effects (taking care of spatio/temporal correlations)
-* $e$ IID, an independent identically distributed residual (white noise)
-* $g()$ the link function, explaining how the observations
+* $e$ IID, an independent identically distributed residual (white noise), following a distribution from the exponential family
+* $g()$ the link function, describing how the observations relate to the linear model (examples: log, logistic)
 
 ## Geostatistics
+Geostatistics studies field variables, whose variation over space (and/or time) is continuous. Suppose we have sample data, e.g. from the \code{meuse} data set:
+```{r,fig=TRUE}
+library(sp)
+demo(meuse,ask=FALSE,echo=FALSE)
+spplot(meuse["zinc"], colorkey = TRUE, sp.layout = meuse.area)
+```
+Looking at the distribution of the `zinc` variable, it may be a good idea to work with log-transforms:
+```{r,fig=TRUE}
+par(mfrow = c(1,2))
+hist(meuse$zinc)
+hist(log(meuse$zinc))
+par(mfrow = c(1,1))
+```
+For interpolation, we first try to compute the sample variogram, and fit a valid model to it:
+```{r, fig=TRUE}
+library(gstat)
+v = variogram(log(zinc)~1, meuse)
+v.fit = fit.variogram(v, vgm(1, "Sph", 900, 1))
+plot(v, v.fit)
+```
+before we interpolate the values by kriging:
+```{r, fig=TRUE}
+k = krige(log(zinc)~1, meuse, meuse.grid, v.fit)
+spplot(k["var1.pred"], 
+    sp.layout = c(meuse.area, list(meuse, col = 'green', pch = 1)))
+```
 
 ## Point pattern analysis
 
+We can consider the `meuse` data set again, and look at the density of the sample locations. Note that this considers _only_ the locations, not any measured values.
+```{r, fig=TRUE}
+cc = coordinates(meuse)
+library(spatstat)
+library(maptools) # as(.,"owin")
+pp = ppp(cc[,1], cc[,2], window = as(meuse.area, "owin"))
+plot(pp)
+```
+This plot is the data we look at: distribution of points (sample locations) in the observation window. We can estimate the G-function, which computers the nearest neighbour distribution and compares this to a CSR (completely spatial
+random) function.
+```{r,fig=TRUE}
+plot(Gest(pp))
+```
+If we simulate 99 realisations of a CSR process, and give the envelope of the G-function for this set, we can compare our sample with the CSR process,
+```{r,fig=TRUE}
+plot(envelope(pp, fun = Gest, nsim = 99))
+```
+and see that compared to CSR, in our sample small distances are under-represented.
+
+A density of the point patterns is obtained by:
+```{r,fig=TRUE}
+plot(density(pp))
+```
+note that this function chooses several variables automatically, including the bandwith (smoothing factor) of the density; less or more smoothed densities are obtained by specifying `sigma`, the kernel width:
+```{r,fig=TRUE}
+par(mfrow=c(1,2))
+plot(density(pp, sigma = 100))
+plot(density(pp, sigma = 1000))
+par(mfrow=c(1,1))
+```
+
 ## Areal data analysis
+Many areal data analysis methods are found in R package [spdep](https://cran.r-project.org/web/packages/spdep/index.html); it has a [vignette](https://cran.r-project.org/web/packages/spdep/vignettes/sids.pdf) on the NC SIDS data with a worked-out use case on health data.
+
+```{r,fig=TRUE}
+library(spdep)
+example(nc.sids)
+spplot(nc.sids["SID74"])
+```
 
 # R
 

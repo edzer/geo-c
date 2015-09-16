@@ -21,10 +21,10 @@ You can make discoveries on your own, but they only become part of science after
 Generally, there are two pathways for gathering knowledge deduction and induction.
 
 ## Deduction
-Deduction start from first principles (axioms) and derives consequences, within the framework of these axioms. Example are found e.g. in Euclidean geometry. In this framework, one can proof things: if the axioms are true, then some facts deriviing from it must also be true. Logic, mathematics.
+Deduction start from first principles (axioms) and derives consequences, within the framework of these axioms. Example are found e.g. in Euclidean geometry. In this framework, one can proof things: if the axioms are true, then some facts deriving from it must also be true. Logic, mathematics.
 
 ## Induction
-Induction works the other way around: we confront ideas (hypotheses, _possible truths_) with observations on the real world, and try to choose the best. Along this path, one cannot find absolute truth, but only gain evidence for one hypothesis over the other. The principle is that of _falsification_ (due to Popper): using observation, we try to falsify hypothesis A in favour of hypothesis B. That doesn't make B true, but the best hypothesis around, until hypothesis C defies B. Natural sciences, social sciences. The science area that is concerned with probabilistic statements about hypothesis is statistics. The science area that predicts the frequencies of outcomes of observation, given knowlegde of the truth, is probability.
+Induction works the other way around: we confront ideas (hypotheses, _possible truths_) with observations on the real world, and try to choose the best. Along this path, one cannot find absolute truth, but only gain evidence for one hypothesis over the other. The principle is that of _falsification_ (due to Popper): using observation, we try to falsify hypothesis A in favour of hypothesis B. That doesn't make B true, but the best hypothesis around, until hypothesis C defies B. Natural sciences, social sciences. The science area that is concerned with probabilistic statements about hypothesis is statistics. The science area that predicts the frequencies of outcomes of observation, given knowledge of the truth, is probability.
 
 # Data analysis
 
@@ -66,11 +66,11 @@ As mentioned above, data are always discrete. The reason for this is
 that continuous variation in the real world is usually not understood
 for 100%, and so cannot be captured fully by parametric, continuous
 functions. Hence, we would need an infinite amount of observations
-for any limited time frame or spatial extent to reprensent it.
+for any limited time frame or spatial extent to represent it.
 
 ## Limitation of relational databases
 
-There is a tendency to store all data in (relational) databases. This is a good idea when the records refer to objects (such as persons), but is not always a good idea when the data refer to continuosly varying phenomena.  For instance, for images the elementary (discrete) observation is an image pixel. Yet, storing a pixel value in each record of a data base is not considered a good idea, because
+There is a tendency to store all data in (relational) databases. This is a good idea when the records refer to objects (such as persons), but is not always a good idea when the data refer to continuously varying phenomena.  For instance, for images the elementary (discrete) observation is an image pixel. Yet, storing a pixel value in each record of a data base is not considered a good idea, because
 
 * it takes much more space, and requires explicit storing of which pixel belongs to which image, and to which location (row/column)
 * the natural ordering of pixels in a 2-D array gets lost
@@ -88,7 +88,7 @@ Examples: air temperature, CO2 content of the air, O2 pressure in the water
 
 Point patterns: $D \Rightarrow S \times T$; special cases spatial ($D \Rightarrow S$) and temporal ($D \Rightarrow T$) point patterns.
 
-Examples: epicenters of earth quakes; disease cases; land mines; sightings of a particular bird species.
+Examples: epicentres of earth quakes; disease cases; land mines; sightings of a particular bird species.
 
 Since both objects and events typically have a duration (or lifetime), their distinction is sometimes a matter of perspective. When considering a person as an object from the "now" perspective, on a geologic time scale its life is a short-duration event.
 
@@ -112,9 +112,9 @@ Objects that move their position (or extent) over time create trajectories $T \R
 Name the appropriate technique to compare
 
 * a sample with a fixed value
-* two random samples wrt their mean value
-* two random samples wrt their variance
-* $k$ random samples wrt their mean value
+* two random samples with respect to their mean value
+* two random samples with respect to their variance
+* $k$ random samples with respect to their mean value
 * the variation of two continuous variable
 * how one continuous variable depends on more than one (continuous, or nominal) variables
 
@@ -131,18 +131,18 @@ usually focus on one of
 
 although sometimes several data types need to be integrated (e.g., for individual disease cases socio-economic data are available only for counties).
 
-In many cases, so-called generalized linear mixed models (GLMM) are fitted; these
+In many cases, so-called generalised linear mixed models (GLMM) are fitted; these
 can be seen as extensions of the standard linear model (LM) 
 
 $$y = X \beta + e$$ 
 
 with IID e, i.e. $\mbox{Cov}(e)=\sigma^2 I$ in two  ways:
 
-* the generalized linear model (GLM) allows errors, under the LM Gaussian, to be from one of the exponential distributions, and introduces a link function $g()$:
+* the generalised linear model (GLM) allows errors, under the LM Gaussian, to be from one of the exponential distributions, and introduces a link function $g()$:
 $$\mbox{E}(y) = \mu \ \ g(\mu) = X \beta$$
 * the random effect contains a spatially, temporally or spatio-temporally correlated effect, and is split in $Z\gamma + e$, where $e$ is still IID and $Z \gamma$ represents random effects.
 
-This means we end up with the generalized linear mixed model
+This means we end up with the generalised linear mixed model
 $$y = g^{-1}(X \beta + Z \gamma) + e$$
 with 
 
@@ -211,7 +211,7 @@ A density of the point patterns is obtained by:
 plot(density(pp))
 ```
 
-note that this function chooses several variables automatically, including the bandwith (smoothing factor) of the density; less or more smoothed densities are obtained by specifying `sigma`, the kernel width:
+note that this function chooses several variables automatically, including the bandwidth (smoothing factor) of the density; less or more smoothed densities are obtained by specifying `sigma`, the kernel width:
 ```{r,fig=TRUE}
 par(mfrow=c(1,2))
 plot(density(pp, sigma = 100))
@@ -234,7 +234,7 @@ spplot(nc.sids["SID74"])
 
 In essence, R implements a programming language that lets you execute (evaluate) expressions like
 ```{r}
-a <- 1:4 # assign the numbers 1 through 4 to a; asignment doesn't print anything
+a <- 1:4 # assign the numbers 1 through 4 to a; assignment doesn't print anything
 a # simply print/echo
 a + 1 # add one, print
 a ^ 2 # square, print
@@ -268,19 +268,19 @@ CRAN quality control includes
 
 Open source software is software that you not only can use, but from which you can also read the source code. Open source software is not always for free: you can buy Ubuntu or Redhat linux distributions. The benefit of doing so lies often in service contracts. Data centers and cloud providers often offer paid services, but are built on open source software.
 
-For scientific computing, using open source software is the only way to guarantee maximal transparency; along with open access to publications and data, it is one of the pilars of _open science_. 
+For scientific computing, using open source software is the only way to guarantee maximal transparency; along with open access to publications and data, it is one of the pillars of _open science_. 
 
-Open source software is sometimes said to be better software, because many eyes make bugs shallow. A number of serious security flaws in abundant open source components (Heartbleed: ssh, Shellshock: bash) have stressed once more that for many eyes to look at (open sourc) software, effort (i.e.: money) is needed.
+Open source software is sometimes said to be better software, because many eyes make bugs shallow. A number of serious security flaws in abundant open source components (Heartbleed: ssh, Shellshock: bash) have stressed once more that for many eyes to look at (open source) software, effort (i.e.: money) is needed.
 
 ## Collaborative development: git, GitHub
 
-Today it is extremely easy to publish open source software on the internet, and to contribute to, or collaborate with other developers in an open way. Currently the dominant platform for doing this is github. Other platforms have been popular in the past (sourceforge, google code), and there is no guarantee that github will remain popular, available, or even free.
+Today it is extremely easy to publish open source software on the internet, and to contribute to, or collaborate with other developers in an open way. Currently the dominant platform for doing this is GitHub. Other platforms have been popular in the past (sourceforge, google code), and there is no guarantee that GitHub will remain popular, available, or even free.
 
-Exercise: create a github account and create an open source project on it.
+Exercise: create a GitHub account and create an open source project on it.
 
 ## Inviting third parties to collaborate
 
-Having a project on github (or any other collaborative software development platform) is all but a guarantee that someone will discover your software, use it, and contribute. For this to happen, you need to actively communicate your work, draw attention to it, and advertise. Connecting the project to existing, similar projects may help (think of the case of R packages). 
+Having a project on GitHub (or any other collaborative software development platform) is all but a guarantee that someone will discover your software, use it, and contribute. For this to happen, you need to actively communicate your work, draw attention to it, and advertise. Connecting the project to existing, similar projects may help (think of the case of R packages). 
 
 ## Licenses
 
